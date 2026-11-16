@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aman Mishra Portfolio</title>
+<meta name="description" content="Aman Mishra, freelance backend engineer. Rails and Spring Boot APIs, Kafka event pipelines, AI features and NetSuite integrations.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..800&family=Geist+Mono:wght@400..600&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: a night-shift control room. Event lanes flow behind the hero,
+   a live terminal posts documents, results sit in a bento grid of glass tiles.
+   Single dark theme by choice. */
+:root{
+  color-scheme:dark;
+  --bg:#07090F; --panel:#0E121C; --glass:rgba(255,255,255,.035); --line:rgba(255,255,255,.09);
+  --ink:#EEF0F7; --muted:#8D95AB; --ember:#FF7A45; --rose:#FF4D8D; --mint:#5EEAD4; --indigo:#7C8CFF;
+  --grad:linear-gradient(100deg,var(--ember),var(--rose));
+  --sans:"Geist",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"Geist Mono",ui-monospace,Menlo,Consolas,monospace;
+  --serif:"Instrument Serif",Georgia,serif;
+  --wrap:1160px; --gut:clamp(18px,4.5vw,48px); --r:20px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit}
+a:focus-visible,button:focus-visible{outline:2px solid var(--mint);outline-offset:3px;border-radius:8px}
+::selection{background:var(--ember);color:#120A06}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 var(--gut)}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.kicker{font-family:var(--mono);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:inline-flex;align-items:center;gap:10px}
+.kicker::before{content:"";width:22px;height:1px;background:var(--grad)}
+.grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* atmosphere */
+.glow{position:absolute;border-radius:50%;filter:blur(110px);pointer-events:none;z-index:0}
+.g1{width:560px;height:560px;background:rgba(255,122,69,.20);top:-220px;right:-120px}
+.g2{width:520px;height:520px;background:rgba(124,140,255,.17);top:160px;left:-260px}
+.grid-bg{position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:56px 56px;-webkit-mask-image:radial-gradient(ellipse 70% 60% at 50% 30%,#000 20%,transparent 75%);mask-image:radial-gradient(ellipse 70% 60% at 50% 30%,#000 20%,transparent 75%);opacity:.5;pointer-events:none}
+
+/* nav */
+.nav{position:sticky;top:14px;z-index:50;display:flex;justify-content:center;padding:0 var(--gut)}
+.nav-in{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 18px;width:100%;max-width:820px;padding:9px 10px 9px 20px;border:1px solid var(--line);border-radius:999px;background:rgba(10,13,21,.72);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
+.brand{font-weight:650;letter-spacing:-.01em;text-decoration:none;display:flex;align-items:center;gap:9px}
+.brand i{width:9px;height:9px;border-radius:3px;background:var(--grad);display:block;transform:rotate(45deg)}
+.nav nav{display:flex;flex-wrap:wrap;gap:2px 4px;align-items:center}
+.nav nav a{font-size:14px;text-decoration:none;color:var(--muted);padding:7px 12px;border-radius:999px;transition:color .2s,background .2s}
+.nav nav a:hover{color:var(--ink);background:var(--glass)}
+.nav nav a.pill{color:#140B07;background:var(--grad);font-weight:600}
+
+/* hero */
+.hero{position:relative;overflow:hidden;margin-top:-62px;padding-top:62px}
+#lanes{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:.75}
+.hero-in{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(28px,5vw,60px);align-items:center;padding-top:clamp(56px,9vw,112px);padding-bottom:clamp(48px,7vw,88px)}
+.badge{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:12.5px;padding:7px 14px 7px 11px;border:1px solid var(--line);border-radius:999px;background:var(--glass);color:var(--ink)}
+.pulse{position:relative;width:8px;height:8px;border-radius:50%;background:var(--mint);flex:none}
+.pulse::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:1px solid var(--mint);animation:ping 2s ease-out infinite}
+@keyframes ping{from{transform:scale(.5);opacity:.9}to{transform:scale(1.5);opacity:0}}
+h1{font-weight:650;font-size:clamp(42px,6.6vw,84px);line-height:.98;letter-spacing:-.045em;margin:22px 0 22px;text-wrap:balance}
+h1 em{font-family:var(--serif);font-weight:400;letter-spacing:-.02em;font-size:1.08em;padding-right:.08em}
+.lede{font-size:clamp(17px,1.55vw,19.5px);color:#C3C8D8;max-width:52ch;margin:0 0 30px}
+.lede b{color:var(--ink);font-weight:550}
+.cta{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.btn{font-family:var(--sans);font-size:15.5px;font-weight:600;text-decoration:none;padding:13px 22px;border-radius:999px;border:1px solid var(--line);background:var(--glass);color:var(--ink);cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:transform .2s ease,box-shadow .2s ease,border-color .2s}
+.btn:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.28)}
+.btn.primary{background:var(--grad);border-color:transparent;color:#140B07;box-shadow:0 8px 34px -8px rgba(255,100,90,.55)}
+.btn.primary:hover{box-shadow:0 14px 44px -8px rgba(255,100,90,.75)}
+.btn svg{width:16px;height:16px}
+.stackline{margin-top:30px;display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-family:var(--mono);font-size:12.5px;color:#C3C8D8;padding:4px 10px;border:1px solid var(--line);border-radius:8px;background:var(--glass)}
+
+/* terminal */
+.term{position:relative;border-radius:var(--r);border:1px solid transparent;background:linear-gradient(var(--panel),var(--panel)) padding-box,linear-gradient(140deg,rgba(255,122,69,.6),rgba(255,255,255,.08) 35%,rgba(124,140,255,.5)) border-box;box-shadow:0 40px 90px -30px rgba(0,0,0,.8),0 0 70px -30px rgba(255,122,69,.4)}
+.term-bar{display:flex;align-items:center;gap:7px;padding:13px 16px;border-bottom:1px solid var(--line)}
+.term-bar i{width:11px;height:11px;border-radius:50%;background:#2A3040;display:block}
+.term-bar i:first-child{background:#FF5F57}.term-bar i:nth-child(2){background:#FEBC2E}.term-bar i:nth-child(3){background:#28C840}
+.term-bar span{margin-left:10px;font-family:var(--mono);font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.term-bar em{margin-left:auto;font-style:normal;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:2px 7px}
+.rows{list-style:none;margin:0;padding:6px 0;height:252px;overflow:hidden}
+.rows li{display:grid;grid-template-columns:70px minmax(0,1fr) auto;gap:10px;align-items:center;height:34px;padding:0 16px;font-family:var(--mono);font-size:12.5px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.rows li span:nth-child(2){overflow:hidden;text-overflow:ellipsis;color:#D5D9E6}
+.rows .t{color:#5C6479}
+.rows .s{color:var(--mint)}
+.rows li.new{animation:post .5s ease}
+@keyframes post{from{background:rgba(255,122,69,.16);transform:translateY(-34px)}to{background:transparent;transform:none}}
+.term-foot{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line)}
+.term-foot div{padding:14px 16px}
+.term-foot div+div{border-left:1px solid var(--line)}
+.term-foot small{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.term-foot b{font-family:var(--mono);font-size:24px;font-weight:550;font-variant-numeric:tabular-nums}
+.term-note{margin:16px 4px 0;font-size:13.5px;color:var(--muted);max-width:46ch}
+
+/* marquee */
+.marquee{position:relative;z-index:1;border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden;padding:16px 0;-webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+.marquee div{display:flex;gap:44px;width:max-content;animation:slide 38s linear infinite;font-family:var(--mono);font-size:14px;color:var(--muted);white-space:nowrap}
+.marquee span::before{content:"◆";color:var(--ember);margin-right:44px;font-size:9px;vertical-align:middle}
+@keyframes slide{to{transform:translateX(-50%)}}
+
+section{--sp:clamp(40px,5.5vw,72px);position:relative;padding:var(--sp) 0;scroll-margin-top:calc(96px - var(--sp))}
+#results{padding-top:calc(var(--sp) + 80px);scroll-margin-top:calc(16px - var(--sp))}
+h2{font-weight:630;font-size:clamp(30px,4.2vw,52px);line-height:1.03;letter-spacing:-.04em;margin:16px 0 14px;text-wrap:balance;max-width:18ch}
+h2 em{font-family:var(--serif);font-weight:400;letter-spacing:-.015em;font-size:1.07em}
+.intro{max-width:56ch;color:var(--muted);margin:0 0 38px}
+h3{font-weight:620;font-size:20px;line-height:1.2;letter-spacing:-.02em;margin:0 0 8px}
+
+/* glass card with cursor spotlight */
+.card{position:relative;border:1px solid var(--line);border-radius:var(--r);background:var(--glass);padding:26px;overflow:hidden;transition:border-color .25s,transform .25s}
+.card::before{content:"";position:absolute;inset:0;background:radial-gradient(380px circle at var(--mx,50%) var(--my,-40%),rgba(255,122,69,.13),transparent 60%);opacity:0;transition:opacity .3s;pointer-events:none}
+.card:hover{border-color:rgba(255,255,255,.2)}
+.card:hover::before{opacity:1}
+.card>*{position:relative}
+
+/* bento */
+.bento{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:16px}
+.tile{display:flex;flex-direction:column;justify-content:space-between;gap:26px;min-height:190px}
+.tile.w3{grid-column:span 3}.tile.w2{grid-column:span 2}.tile.w4{grid-column:span 4}
+.tile .big{font-weight:640;font-size:clamp(40px,5.4vw,68px);line-height:.95;letter-spacing:-.05em;font-variant-numeric:tabular-nums}
+.tile .big small{font-family:var(--mono);font-size:.26em;letter-spacing:0;color:var(--muted);font-weight:450;margin-left:6px}
+.tile p{margin:0;color:var(--muted);font-size:15.5px;max-width:44ch}
+.tile p b{color:var(--ink);font-weight:550}
+.tile .tag{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.bars{display:grid;gap:10px;margin-top:4px}
+.bar{display:grid;grid-template-columns:58px minmax(0,1fr);gap:12px;align-items:center;font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+.track{display:flex;align-items:center;gap:10px}
+.track i{display:block;height:14px;border-radius:99px;background:#2B3244}
+.track.a i{background:var(--grad);box-shadow:0 0 22px rgba(255,100,90,.55)}
+.track b{color:var(--ink);font-weight:550;white-space:nowrap}
+
+/* services */
+.svc-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.svc{display:flex;flex-direction:column;gap:6px}
+.icon{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;border:1px solid var(--line);background:rgba(255,122,69,.08);margin-bottom:14px;color:var(--ember)}
+.icon svg{width:22px;height:22px}
+.svc p{margin:0 0 16px;color:var(--muted);max-width:48ch}
+.svc ul{margin:auto 0 0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:6px}
+
+/* work */
+.cases{display:grid;gap:16px}
+.case{display:grid;grid-template-columns:minmax(0,230px) minmax(0,1fr);gap:16px 40px;padding:30px}
+.case .meta{font-family:var(--mono);font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:10px}
+.case .meta b{font-family:var(--sans);font-size:clamp(34px,4vw,48px);font-weight:640;letter-spacing:-.05em;line-height:1}
+.case dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 18px;margin:14px 0 0;font-size:16px;max-width:62ch}
+.case dt{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding-top:5px}
+.case dd{margin:0;color:#C9CEDC}
+.case dd.win{color:var(--ink);font-weight:550}
+
+/* projects */
+.proj{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.p-card{display:flex;flex-direction:column;gap:12px;padding:0}
+.p-head{font-family:var(--mono);font-size:12px;color:var(--muted);padding:12px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;white-space:nowrap;overflow:hidden}
+.p-head span:first-child{overflow:hidden;text-overflow:ellipsis}
+.p-head span:last-child{color:var(--mint)}
+.p-body{padding:10px 22px 24px;display:flex;flex-direction:column;gap:10px;flex:1}
+.p-body p{margin:0;color:var(--muted);font-size:15.5px}
+.p-body .num{font-family:var(--mono);font-size:13.5px;color:var(--ink);border-top:1px dashed var(--line);padding-top:14px;margin-top:auto}
+.p-body a{font-size:14.5px;font-weight:600;text-decoration:none;color:var(--ember);display:inline-flex;gap:6px;align-items:center}
+.p-body a:hover{text-decoration:underline;text-underline-offset:4px}
+
+/* process */
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;counter-reset:s}
+.steps li{counter-increment:s}
+.steps li::after{content:"";display:none}
+.steps .n{font-family:var(--mono);font-size:13px;display:inline-flex;align-items:center;gap:10px;margin-bottom:16px;color:var(--ember)}
+.steps .n::before{content:counter(s,decimal-leading-zero)}
+.steps .n::after{content:"";width:38px;height:1px;background:var(--grad)}
+.steps p{margin:0;color:var(--muted);font-size:15.5px}
+
+/* about */
+.about{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(24px,5vw,56px);align-items:start}
+.about p{max-width:58ch;margin:0 0 14px;color:#C9CEDC}
+.facts{margin:0;padding:6px 26px;list-style:none}
+.facts li{padding:15px 0;border-bottom:1px solid var(--line);font-size:15.5px}
+.facts li:last-child{border-bottom:0}
+.facts b{display:block;font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:450;margin-bottom:2px}
+
+/* contact */
+.contact{position:relative;overflow:hidden;border-radius:28px;border:1px solid transparent;background:linear-gradient(#0C1019,#0C1019) padding-box,linear-gradient(120deg,var(--ember),rgba(255,255,255,.08) 40%,var(--indigo)) border-box;padding:clamp(30px,6vw,72px);display:grid;gap:22px;justify-items:start}
+.contact .glow{width:420px;height:420px;background:rgba(255,77,141,.22);right:-140px;bottom:-200px;top:auto}
+.contact>*:not(.glow){position:relative;z-index:1}
+.contact h2{margin:0;max-width:16ch;font-size:clamp(34px,5.4vw,66px)}
+.contact p{margin:0;max-width:52ch;color:#C3C8D8}
+.mail{font-family:var(--mono);font-size:clamp(16px,2.4vw,24px);overflow-wrap:anywhere}
+.links{display:flex;flex-wrap:wrap;gap:8px 24px;font-family:var(--mono);font-size:14px;color:var(--muted)}
+.links a:hover{color:var(--ink)}
+footer{padding:30px 0 46px;font-family:var(--mono);font-size:12.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-between}
+
+/* gentle reveal: stays readable before it runs */
+.rv{opacity:.4;transform:translateY(22px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}
+.rv.in{opacity:1;transform:none}
+
+@media (max-width:940px){
+  .hero-in,.about{grid-template-columns:minmax(0,1fr)}
+  .proj{grid-template-columns:minmax(0,1fr)}
+  .steps{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .case{grid-template-columns:minmax(0,1fr)}
+  .tile.w2,.tile.w3,.tile.w4{grid-column:span 3}
+}
+@media (max-width:640px){
+  body{font-size:16px}
+  .nav nav a:not(.pill){display:none}
+  .svc-grid,.steps{grid-template-columns:minmax(0,1fr)}
+  .tile.w2,.tile.w3,.tile.w4{grid-column:span 6}
+  .tile{min-height:0}
+  .card{padding:22px}.p-card{padding:0}.case{padding:22px}
+  .facts{padding:4px 22px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .rows li.new,.marquee div,.pulse::after{animation:none}
+  .rv{opacity:1;transform:none;transition:none}
+  .btn,.card{transition:none}
+}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div class="nav-in">
+    <a class="brand" href="#top"><i></i>Aman Mishra</a>
+    <nav aria-label="Sections">
+      <a href="#results">Results</a>
+      <a href="#services">Services</a>
+      <a href="#work">Work</a>
+      <a href="#projects">Projects</a>
+      <a class="pill" href="#contact">Hire me</a>
+    </nav>
+  </div>
+</div>
+
+<main id="top">
+<div class="hero">
+  <div class="glow g1"></div><div class="glow g2"></div>
+  <div class="grid-bg"></div>
+  <canvas id="lanes" aria-hidden="true"></canvas>
+  <div class="wrap hero-in">
+    <div>
+      <span class="badge"><span class="pulse"></span>Open for freelance projects</span>
+      <h1>Backends that post every event. <em class="grad">Once.</em></h1>
+      <p class="lede">I'm Aman, a backend engineer in Noida. I build APIs, event pipelines, AI features and NetSuite integrations in Rails, Java and Python. The accounting pipeline I built at RedDoorz handles <b>200,000+ documents a day</b> and has not lost one.</p>
+      <div class="cta">
+        <a class="btn primary" href="#contact">Start a project
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+        <a class="btn" href="#work">See the work</a>
+      </div>
+      <div class="stackline">
+        <span class="chip">Ruby on Rails</span><span class="chip">Java</span><span class="chip">Spring Boot</span><span class="chip">Python</span><span class="chip">Kafka</span><span class="chip">LLM APIs</span><span class="chip">NetSuite</span>
+      </div>
+    </div>
+
+    <div>
+      <div class="term" aria-label="Simulated event stream">
+        <div class="term-bar"><i></i><i></i><i></i><span>kafka · accounting.documents</span><em>simulated</em></div>
+        <ul class="rows" id="rows" aria-hidden="true"></ul>
+        <div class="term-foot">
+          <div><small>Posted today</small><b id="count">0</b></div>
+          <div><small>Lost</small><b class="grad">0</b></div>
+        </div>
+      </div>
+      <p class="term-note">A simulation at the real pace of my production pipeline: 200,000 events a day is about 2.3 every second.</p>
+    </div>
+  </div>
+
+  <div class="marquee" aria-hidden="true"><div id="mq">
+    <span>Ruby on Rails</span><span>Java</span><span>Spring Boot</span><span>Python</span><span>FastAPI</span><span>Apache Kafka</span><span>PostgreSQL</span><span>Redis</span><span>MongoDB</span><span>NetSuite SuiteQL</span><span>OpenAI API</span><span>LangChain</span><span>RAG</span><span>React</span><span>Node.js</span><span>Express</span><span>REST APIs</span><span>JWT auth</span><span>Microservices</span><span>Docker</span><span>AWS</span><span>GitHub Actions</span><span>Test-driven development</span>
+  </div></div>
+</div>
+
+<section id="results">
+  <div class="wrap">
+    <span class="kicker">Results</span>
+    <h2>What changed after I <em class="grad">shipped</em></h2>
+    <p class="intro">Figures from production systems at RedDoorz and from my own open-source work.</p>
+    <div class="bento">
+      <div class="card tile w4 rv">
+        <span class="tag">Kafka accounting pipeline</span>
+        <div><div class="big"><span data-count="200">200</span>K+<small>events / day</small></div></div>
+        <p>AR invoices, AP invoices, journals and credit memos across the full booking lifecycle. <b>Zero data loss, no manual intervention.</b></p>
+      </div>
+      <div class="card tile w2 rv">
+        <span class="tag">ERP licensing cost</span>
+        <div class="big grad">−<span data-count="40">40</span>%</div>
+        <p>After leading the SAP to NetSuite migration.</p>
+      </div>
+      <div class="card tile w3 rv">
+        <span class="tag">Journal entries posted to NetSuite</span>
+        <div class="bars" role="img" aria-label="Journal entries before 5.6 million, after under 1.5 million">
+          <div class="bar"><span>Before</span><div class="track"><i style="width:calc(100% - 64px)"></i><b>5.6M+</b></div></div>
+          <div class="bar"><span>After</span><div class="track a"><i style="width:calc((100% - 64px)*.268)"></i><b>&lt;1.5M</b></div></div>
+        </div>
+        <p><b>70%+ fewer entries</b> from a transaction-grouping module built from scratch.</p>
+      </div>
+      <div class="card tile w3 rv">
+        <span class="tag">Manual finance work removed</span>
+        <div class="big">~<span data-count="5">5</span><small>days / month</small></div>
+        <p>Net revenue calculation and core accounting workflows automated.</p>
+      </div>
+      <div class="card tile w3 rv">
+        <span class="tag">Database scale</span>
+        <div class="big">1,000+<small>GB</small></div>
+        <p>Hands-on with production databases at <b>terabyte scale</b>.</p>
+      </div>
+      <div class="card tile w3 rv">
+        <span class="tag">Unauthorized access incidents</span>
+        <div class="big">0</div>
+        <p>On the HR platform since action-level access control launched.</p>
+      </div>
+      <div class="card tile w3 rv">
+        <span class="tag">Distributed cache</span>
+        <div class="big"><span data-count="12">12</span>K+<small>RPS</small></div>
+        <p>Personal project, multi-node with consistent hashing.</p>
+      </div>
+      <div class="card tile w3 rv">
+        <span class="tag">Cache disk reads on misses</span>
+        <div class="big grad">−<span data-count="85">85</span>%</div>
+        <p>After adding Bloom filters.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="services">
+  <div class="wrap">
+    <span class="kicker">Services</span>
+    <h2>Four things I can <em class="grad">build</em> for you</h2>
+    <p class="intro">Each is a fixed scope with a fixed price, agreed before I write any code.</p>
+    <div class="svc-grid">
+      <div class="card svc rv">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="6" rx="2"/><rect x="3" y="14" width="18" height="6" rx="2"/><path d="M7 7h.01M7 17h.01"/></svg></div>
+        <h3>Backend and APIs</h3>
+        <p>New REST APIs, slow endpoints made fast, flaky jobs made reliable. I have worked on production databases of 1,000+ GB, so large tables don't scare me. Written test-first so the next developer can change it safely.</p>
+        <ul><li class="chip">Ruby on Rails</li><li class="chip">Java</li><li class="chip">Spring Boot</li><li class="chip">Python</li><li class="chip">PostgreSQL</li><li class="chip">Kafka</li><li class="chip">Redis</li><li class="chip">Microservices</li></ul>
+      </div>
+      <div class="card svc rv">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3z"/><path d="M19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8L19 16z"/></svg></div>
+        <h3>AI features in your product</h3>
+        <p>Chatbots, question answering over your documents, agents that call your APIs, and browser extensions that draft replies for your team.</p>
+        <ul><li class="chip">Python</li><li class="chip">OpenAI API</li><li class="chip">LangChain</li><li class="chip">RAG</li><li class="chip">Agents</li><li class="chip">Chrome extensions</li></ul>
+      </div>
+      <div class="card svc rv">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h11M11 3l4 4-4 4M20 17H9M13 13l-4 4 4 4"/></svg></div>
+        <h3>NetSuite and finance integrations</h3>
+        <p>Sync orders, invoices and journals between your systems and NetSuite. Built with retries and idempotency so nothing posts twice.</p>
+        <ul><li class="chip">SuiteQL</li><li class="chip">REST</li><li class="chip">SAP migration</li><li class="chip">Accounting automation</li></ul>
+      </div>
+      <div class="card svc rv">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 15c-1.5 1.5-2 5-2 5s3.500-.5 5-2c.8-.8.8-2.200 0-3s-2.200-.8-3 0z"/><path d="M12 15l-3-3c1-4 4-8 11-9-1 7-5 10-8 12z"/><path d="M9 12H5l2-4h4M12 15v4l4-2v-4"/></svg></div>
+        <h3>MVP builds for founders</h3>
+        <p>A working first version: auth, core endpoints, a React front end, CI/CD and deployment on AWS. You get the repository and a handover document.</p>
+        <ul><li class="chip">React</li><li class="chip">Node.js</li><li class="chip">Express</li><li class="chip">MongoDB</li><li class="chip">JWT auth</li><li class="chip">Docker</li><li class="chip">AWS</li><li class="chip">GitHub Actions</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="work">
+  <div class="wrap">
+    <span class="kicker">Selected work · RedDoorz · 2024 to present</span>
+    <h2>Three systems, in <em class="grad">detail</em></h2>
+    <p class="intro">RedDoorz is a hotel booking platform operating across Southeast Asia. I work on its finance and HR systems.</p>
+    <div class="cases">
+      <article class="card case rv">
+        <div class="meta"><b class="grad">200K+</b>events a day<span>Kafka · Rails · NetSuite</span></div>
+        <div>
+          <h3>Replacing a system that crashed with one that doesn't</h3>
+          <dl>
+            <dt>Problem</dt><dd>The accounting system failed under load and needed people to step in.</dd>
+            <dt>Build</dt><dd>A Kafka event-driven pipeline covering the full booking lifecycle: AR invoices, AP invoices, journals and credit memos.</dd>
+            <dt>Result</dt><dd class="win">200K+ document events a day, zero data loss, no manual intervention.</dd>
+          </dl>
+        </div>
+      </article>
+      <article class="card case rv">
+        <div class="meta"><b class="grad">−70%</b>journal entries<span>Built from scratch</span></div>
+        <div>
+          <h3>Cutting more than 4 million journal entries</h3>
+          <dl>
+            <dt>Problem</dt><dd>Journal volume posted to NetSuite had passed 5.6 million entries.</dd>
+            <dt>Build</dt><dd>A module that groups related transactions before posting.</dd>
+            <dt>Result</dt><dd class="win">Entries fell from 5.6M+ to under 1.5M.</dd>
+          </dl>
+        </div>
+      </article>
+      <article class="card case rv">
+        <div class="meta"><b class="grad">−40%</b>licensing cost<span>SuiteQL · REST APIs</span></div>
+        <div>
+          <h3>Moving finance from SAP to NetSuite</h3>
+          <dl>
+            <dt>Problem</dt><dd>Finance ran on SAP, with licensing costs the business wanted to reduce.</dd>
+            <dt>Build</dt><dd>I led the migration using SuiteQL and REST APIs, with retry logic and idempotency on every write.</dd>
+            <dt>Result</dt><dd class="win">Licensing costs down 40%.</dd>
+          </dl>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap">
+    <span class="kicker">Projects</span>
+    <h2>Built on my <em class="grad">own time</em></h2>
+    <p class="intro">Code you can read before you hire me.</p>
+    <div class="proj">
+      <div class="card p-card rv">
+        <div class="p-head"><span>~/distributed-cache</span><span>java</span></div>
+        <div class="p-body">
+          <h3>Distributed Cache</h3>
+          <p>A cache written from scratch with LRU eviction and a write-ahead log, then scaled across nodes with consistent hashing and replication.</p>
+          <div class="num">12,000+ RPS · 85% fewer disk reads on misses</div>
+          <a href="https://github.com/amanmr">View on GitHub →</a>
+        </div>
+      </div>
+      <div class="card p-card rv">
+        <div class="p-head"><span>~/social-app</span><span>react · node</span></div>
+        <div class="p-body">
+          <h3>Social Media Web App</h3>
+          <p>Posts, comments, likes and two-way friend requests, secured with JWT. Tests and deployment run on every push through GitHub Actions.</p>
+          <div class="num">15+ REST APIs · CI/CD on Azure</div>
+          <a href="https://github.com/amanmr">View on GitHub →</a>
+        </div>
+      </div>
+      <div class="card p-card rv">
+        <div class="p-head"><span>~/agoda-auto-reply</span><span>chrome · nlp</span></div>
+        <div class="p-body">
+          <h3>Agoda Auto Reply</h3>
+          <p>A Chrome extension that reads partner messages, scores their sentiment and drafts a reply that fits the context.</p>
+          <div class="num">Winner, RedDoorz Hackathon</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="process">
+  <div class="wrap">
+    <span class="kicker">How a project runs</span>
+    <h2>From first call to <em class="grad">handover</em></h2>
+    <p class="intro">Four steps, the same every time.</p>
+    <ol class="steps">
+      <li class="card rv"><span class="n"></span><h3>Scope call</h3><p>Twenty minutes. You describe the problem, I ask questions until the edges are clear.</p></li>
+      <li class="card rv"><span class="n"></span><h3>Fixed quote</h3><p>Within a day you get the scope, price and delivery date in writing.</p></li>
+      <li class="card rv"><span class="n"></span><h3>Daily updates</h3><p>A short message every working day: done, next, blocked. Code goes to your repository.</p></li>
+      <li class="card rv"><span class="n"></span><h3>Handover</h3><p>Tests passing, a setup guide, and a walkthrough call. One week of free fixes after delivery.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap">
+    <span class="kicker">About</span>
+    <h2>Close to three years in <em class="grad">production</em></h2>
+    <div class="about">
+      <div>
+        <p>I'm a software engineer at RedDoorz, where I own backend services for finance and HR and work with production databases of more than a thousand gigabytes. I take freelance projects on evenings and weekends, which is why I keep them small and clearly scoped.</p>
+        <p>I practice test-driven development on everything I own. At RedDoorz I took a module with almost no coverage to the standard the team later adopted for new work.</p>
+        <p>I also led a team of five across design, backend and frontend to ship a Slot Management System on its release date.</p>
+      </div>
+      <ul class="card facts rv">
+        <li><b>Education</b>B.Tech, Computer Science and Engineering, JSS Academy of Technical Education, Noida. CGPA 8.8/10.</li>
+        <li><b>Competitive programming</b>GeeksforGeeks score 1400+, ranked 24 of 4,000+ at my institute.</li>
+        <li><b>Innovate India Coding Championship</b>Ranked 842 of 100,000+ students.</li>
+        <li><b>Languages</b>Java, Ruby, Python, JavaScript, SQL, C/C++</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="contact" style="padding-top:0;scroll-margin-top:96px">
+  <div class="wrap">
+    <div class="contact">
+      <div class="glow"></div>
+      <span class="kicker">Contact</span>
+      <h2>Have a backend task that's <em class="grad">stuck?</em></h2>
+      <p>Send two or three lines about it. I'll reply within 12 hours with questions or a time for a call.</p>
+      <div class="mail" id="mail">iamamanmr@gmail.com</div>
+      <div class="cta">
+        <a class="btn primary" href="mailto:iamamanmr@gmail.com?subject=Project%20enquiry">Email me</a>
+        <button class="btn" id="copy" type="button">Copy address</button>
+      </div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/amanmr1">linkedin.com/in/amanmr1</a>
+        <a href="https://github.com/amanmr">github.com/amanmr</a>
+      </div>
+    </div>
+    <footer>
+      <span>Aman Mishra · Noida, India · IST, UTC+5:30</span>
+      <span>Rails · Spring Boot · Kafka · AI · NetSuite</span>
+    </footer>
+  </div>
+</section>
+</main>
+
+<script>
+(function(){
+  var still = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* live terminal */
+  var RATE = 200000/86400;
+  var TYPES = [["ar_invoice","INV"],["ap_invoice","BILL"],["journal","JE"],["credit_memo","CM"],["ar_invoice","INV"],["journal","JE"]];
+  var rows = document.getElementById("rows"), count = document.getElementById("count");
+  var seq = 48210 + Math.floor(Math.random()*900);
+  function pad(n){return (n<10?"0":"")+n}
+  function today(){var d=new Date();return Math.floor((d.getHours()*3600+d.getMinutes()*60+d.getSeconds())*RATE)}
+  function row(isNew){
+    var d=new Date(), t=TYPES[seq%TYPES.length], li=document.createElement("li");
+    if(isNew) li.className="new";
+    li.innerHTML='<span class="t">'+pad(d.getHours())+":"+pad(d.getMinutes())+":"+pad(d.getSeconds())+'</span><span>'+t[0]+" "+t[1]+"-"+(seq++)+'</span><span class="s">✓ posted</span>';
+    rows.insertBefore(li, rows.firstChild);
+    while(rows.children.length>8) rows.removeChild(rows.lastChild);
+  }
+  for(var i=0;i<7;i++) row(false);
+  var n = today(); count.textContent = n.toLocaleString("en-US");
+  if(!still){
+    setInterval(function(){ if(document.hidden) return; row(true); n++; var t=today(); if(t>n||t<n-50) n=t; count.textContent=n.toLocaleString("en-US"); }, Math.round(1000/RATE));
+  }
+
+  /* marquee: duplicate once for a seamless loop */
+  var mq=document.getElementById("mq"); mq.innerHTML += mq.innerHTML;
+
+  /* event lanes behind the hero */
+  var cv=document.getElementById("lanes"), cx=cv.getContext("2d"), W=0,H=0,dpr=1,dots=[];
+  function size(){
+    dpr=Math.min(window.devicePixelRatio||1,2); var r=cv.getBoundingClientRect();
+    W=r.width;H=r.height;cv.width=W*dpr;cv.height=H*dpr;cx.setTransform(dpr,0,0,dpr,0,0);
+    var lanes=Math.max(6,Math.round(H/78)); dots=[];
+    for(var l=0;l<lanes;l++){var y=(l+.5)*H/lanes, k=3+Math.floor(Math.random()*3);
+      for(var j=0;j<k;j++) dots.push({x:Math.random()*W,y:y,v:.35+Math.random()*.9,len:18+Math.random()*46,c:Math.random()<.5?0:(Math.random()<.6?1:2)});}
+  }
+  var COL=["255,122,69","124,140,255","94,234,212"];
+  function draw(move){
+    cx.clearRect(0,0,W,H);
+    for(var i=0;i<dots.length;i++){var d=dots[i];
+      if(move){d.x+=d.v; if(d.x-d.len>W) d.x=-10;}
+      var g=cx.createLinearGradient(d.x-d.len,0,d.x,0);
+      g.addColorStop(0,"rgba("+COL[d.c]+",0)"); g.addColorStop(1,"rgba("+COL[d.c]+",.55)");
+      cx.strokeStyle=g; cx.lineWidth=1.2; cx.beginPath(); cx.moveTo(d.x-d.len,d.y); cx.lineTo(d.x,d.y); cx.stroke();
+      cx.fillStyle="rgba("+COL[d.c]+",.9)"; cx.beginPath(); cx.arc(d.x,d.y,1.6,0,6.3); cx.fill();
+    }
+  }
+  size(); draw(false);
+  window.addEventListener("resize",function(){size();draw(false)});
+  if(!still){(function loop(){ if(!document.hidden) draw(true); requestAnimationFrame(loop); })();}
+
+  /* cursor spotlight on cards */
+  document.querySelectorAll(".card").forEach(function(c){
+    c.addEventListener("pointermove",function(e){var r=c.getBoundingClientRect();c.style.setProperty("--mx",(e.clientX-r.left)+"px");c.style.setProperty("--my",(e.clientY-r.top)+"px")});
+  });
+
+  /* reveal and count-up */
+  var rv=document.querySelectorAll(".rv");
+  function countUp(el){
+    var to=+el.getAttribute("data-count"), t0=null;
+    function step(ts){ if(!t0) t0=ts; var p=Math.min((ts-t0)/900,1); el.textContent=Math.round(to*(1-Math.pow(1-p,3))); if(p<1) requestAnimationFrame(step); }
+    requestAnimationFrame(step);
+  }
+  if(still || !("IntersectionObserver" in window)){ rv.forEach(function(e){e.classList.add("in")}); }
+  else{
+    var io=new IntersectionObserver(function(es){es.forEach(function(en){ if(!en.isIntersecting) return;
+      en.target.classList.add("in"); en.target.querySelectorAll("[data-count]").forEach(countUp); io.unobserve(en.target); })},{threshold:.12});
+    rv.forEach(function(e,i){e.style.transitionDelay=(i%4)*70+"ms"; io.observe(e)});
+  }
+
+  /* copy email */
+  var btn=document.getElementById("copy");
+  btn.addEventListener("click",function(){
+    var done=function(ok){btn.textContent=ok?"Copied":"Select the address above";setTimeout(function(){btn.textContent="Copy address"},1800)};
+    try{navigator.clipboard.writeText("iamamanmr@gmail.com").then(function(){done(true)},function(){done(false)})}catch(e){done(false)}
+  });
+})();
+</script>
+</body>
+</html>
